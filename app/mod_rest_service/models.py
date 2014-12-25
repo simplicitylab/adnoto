@@ -12,10 +12,26 @@ class Base(db.Model):
     date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(),
                                            onupdate=db.func.current_timestamp())
 
+# Define a Page model
+class Page(Base):
+    __tablename__ = 'page'
+
+    # Page title
+    title    = db.Column(db.String(128),  nullable=False)
+
+    # notebook id
+    notebook_id = db.Column(db.Integer, db.ForeignKey('notebook.id'))
+
+
 # Define a Notebook model
 class Notebook(Base):
-
     __tablename__ = 'notebook'
 
-    # User Name
+    # Notebook Name
     name    = db.Column(db.String(128),  nullable=False)
+
+    # Pages children
+    pages = db.relationship("Page")
+
+
+
