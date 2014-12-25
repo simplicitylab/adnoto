@@ -27,7 +27,10 @@ class Page(Base):
     __tablename__ = 'page'
 
     # Page title
-    title    = db.Column(db.String(128),  nullable=False)
+    title  = db.Column(db.String(128),  nullable=False)
+
+    # Page content
+    content = db.Column(db.Text, nullable=False)
 
     # notebook id
     notebook_id = db.Column(db.Integer, db.ForeignKey('notebook.id'))
@@ -45,6 +48,14 @@ class Notebook(Base):
 
     # Pages children
     pages = db.relationship("Page")
+
+    def __init__(self, name):
+        """
+        Default constructor
+        """
+        self.name = name
+
+
 
 
 ##### SCHEMAS #####
@@ -64,3 +75,10 @@ class NotebookSchema(Schema):
     class Meta:
         fields = ("id", "date_created", "date_modified", 'name')
 
+# Page schema
+class PageSchema(Schema):
+    """
+    Schema for model page
+    """
+    class Meta:
+        fields = ("id", "date_created", "date_modified", 'title')
