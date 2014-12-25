@@ -11,3 +11,9 @@ curl -H "Content-Type: application/json" -d '{"name":"dit is een testje"}' http:
 ```
 curl -H "Content-Type: application/json" -d '{"title":"dit is een testje", "content":"#hello"}' http://localhost:8080/api/v1/notebook/1/page
 ``
+
+### Deletes a page
+
+```
+curl -H "Content-Type: application/json" -X DELETE http://localhost:8080/api/v1/notebook/1/page/1
+```

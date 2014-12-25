@@ -106,17 +106,38 @@ def get_page(notebook_id, page_id):
     """
     This endpoint gets the page information
     """
-    # gets all pages from notebook
+    # gets  page from notebook
     page = Page.query.filter(Page.notebook_id==notebook_id, Page.id==page_id).first()
 
     # if page is not found
     if page == None:
         return jsonify({"message": "Page could not be found."}), 400
+    else:
+         # serialize sqlalchemy data
+        serializer = PageSchema()
+        result = serializer.dump(page)
+
+        # return json result
+        return jsonify({"page": result.data})
 
 
-     # serialize sqlalchemy data
-    serializer = PageSchema()
-    result = serializer.dump(page)
+@mod_rest_service.route('/notebook/<notebook_id>/page/<page_id>', methods=['DELETE'])
+def delete(notebook_id, page_id):
+    """
+    This endpoint deletes a page
+    """
 
-    # return json result
-    return jsonify({"page": result.data})
+    # gets  page from notebook
+    page = Page.query.filter(Page.notebook_id==notebook_id, Page.id==page_id).first()
+
+    # if page is not found
+    if page == None:
+        return jsonify({"message": "Page could not be found."}), 400
+    else:
+        # remove page from database
+        db.session.delete(page)
+        db.session.commit()
+
+        # return json result
+        return jsonify({})
+
