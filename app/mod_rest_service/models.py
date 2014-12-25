@@ -35,6 +35,14 @@ class Page(Base):
     # notebook id
     notebook_id = db.Column(db.Integer, db.ForeignKey('notebook.id'))
 
+    def __init__(self, title, content, notebook):
+        """
+        Default constructor
+        """
+        self.title = title
+        self.content = content
+        self.notebook_id = notebook.id
+
 
 # Define a Notebook model
 class Notebook(Base):
@@ -54,9 +62,6 @@ class Notebook(Base):
         Default constructor
         """
         self.name = name
-
-
-
 
 ##### SCHEMAS #####
 
@@ -81,4 +86,4 @@ class PageSchema(Schema):
     Schema for model page
     """
     class Meta:
-        fields = ("id", "date_created", "date_modified", 'title')
+        fields = ("id", "date_created", "date_modified", 'title', 'content')

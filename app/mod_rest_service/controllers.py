@@ -42,7 +42,7 @@ def list_notebooks():
 
 
 @mod_rest_service.route('/notebook', methods=['POST'])
-def create_notebook():
+def create_new_notebook():
     """
     This endpoint creates a new notebook
     """
@@ -76,3 +76,23 @@ def list_pages_notebook(notebook_id):
 
     # return json result
     return jsonify({"pages": result.data})
+
+
+@mod_rest_service.route('/notebook/<notebook_id>/page', methods=['POST'])
+def create_new_page(notebook_id):
+    """
+    This endpoint creates a new page in a notebook
+    """
+
+    # get notebook
+    notebook = Notebook.query.get(notebook_id)
+
+    # create new page
+    new_page = Page("hello", "#testje" , notebook)
+
+    # store new page into dbase
+    db.session.add(new_page)
+    db.session.commit()
+
+    # return json result
+    return jsonify({})
