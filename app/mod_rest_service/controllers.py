@@ -84,11 +84,14 @@ def create_new_page(notebook_id):
     This endpoint creates a new page in a notebook
     """
 
+    # get json request data
+    json_data =  request.get_json()
+
     # get notebook
     notebook = Notebook.query.get(notebook_id)
 
     # create new page
-    new_page = Page("hello", "#testje" , notebook)
+    new_page = Page(json_data["title"], json_data["content"] , notebook)
 
     # store new page into dbase
     db.session.add(new_page)
