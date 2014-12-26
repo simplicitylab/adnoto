@@ -17,3 +17,9 @@ curl -H "Content-Type: application/json" -d '{"title":"dit is een testje", "cont
 ```
 curl -H "Content-Type: application/json" -X DELETE http://localhost:8080/api/v1/notebook/1/page/1
 ```
+
+### Creates a new user
+
+```
+curl -H "Content-Type: application/json" -d '{"username":"glenn", "password":"hello", "is_admin": 1}' http://localhost:8080/api/v1/user
+```

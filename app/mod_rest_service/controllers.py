@@ -48,6 +48,7 @@ def list_notebooks():
 
 
 @mod_rest_service.route('/notebook', methods=['POST'])
+@login_required
 def create_new_notebook():
     """
     This endpoint creates a new notebook
@@ -68,6 +69,7 @@ def create_new_notebook():
 
 
 @mod_rest_service.route('/notebook/<notebook_id>/pages', methods=['GET'])
+@login_required
 def list_pages_notebook(notebook_id):
     """
     This endpoint returns all pages within a notebook
@@ -108,6 +110,7 @@ def create_new_page(notebook_id):
 
 
 @mod_rest_service.route('/notebook/<notebook_id>/page/<page_id>', methods=['GET'])
+@login_required
 def get_page(notebook_id, page_id):
     """
     This endpoint gets the page information
@@ -128,6 +131,7 @@ def get_page(notebook_id, page_id):
 
 
 @mod_rest_service.route('/notebook/<notebook_id>/page/<page_id>', methods=['DELETE'])
+@login_required
 def delete(notebook_id, page_id):
     """
     This endpoint deletes a page
@@ -154,7 +158,7 @@ def create_new_user():
     json_data =  request.get_json()
 
     # create new user
-    new_user = User(json_data["username"], json_data["password"])
+    new_user = User(json_data["username"], json_data["password"], json_data["is_admin"])
 
     # store new user into dbase
     db.session.add(new_user)

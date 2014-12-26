@@ -28,10 +28,12 @@ class User(Base):
 
     username = db.Column('username', db.String(20), unique=True , index=True)
     password = db.Column('password' , db.String(10))
+    is_admin = db.Column('is_admin', db.Boolean())
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, is_admin):
         self.username = username
         self.password = generate_password_hash(password)
+        self.is_admin = is_admin
 
     def checkPassword(self, password):
         """
