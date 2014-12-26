@@ -4,12 +4,17 @@ from flask import Blueprint, request, render_template, jsonify
 # Import the database object from the main app module
 from app import db
 
+# Import form-login required decorator
+from flask.ext.login import login_required
+
 # Import module models and schema Notebook, Page
 from app.mod_rest_service.models import Notebook
 from app.mod_rest_service.models import NotebookSchema
 
 from app.mod_rest_service.models import Page
 from app.mod_rest_service.models import PageSchema
+
+from app.mod_auth.models import User
 
 # Define the blueprint: 'rest_service', set its url prefix: app.url/api/v1
 mod_rest_service = Blueprint('rest_service', __name__, url_prefix='/api/v1')
@@ -26,6 +31,7 @@ def test():
 
 
 @mod_rest_service.route('/notebooks', methods=['GET'])
+@login_required
 def list_notebooks():
     """
     This endpoint returns all notebooks
@@ -141,3 +147,18 @@ def delete(notebook_id, page_id):
         # return json result
         return jsonify({})
 
+@mod_rest_service.route('/user', methods=['POST'])
+def create_new_user():
+
+    # get json request data
+    json_data =  request.get_json()
+
+    # create new user
+    new_user = User(json_data["username"], json_data["password"])
+
+    # store new user into dbase
+    db.session.add(new_user)
+    db.session.commit()
+
+    # return json result
+    return jsonify({})
