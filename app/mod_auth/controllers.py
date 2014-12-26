@@ -42,8 +42,12 @@ def login():
         if user != None:
             # check password
             if user.checkPassword(password):
+
+                # login user
                 login_user(user)
-                return jsonify({"status":"user found"})
+
+                # redirect to homepage
+                return redirect('/')
 
     # render login html
     return render_template('auth/login.html', form=loginForm)

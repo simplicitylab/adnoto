@@ -24,10 +24,12 @@ login_manager.init_app(app)
 # Import a module / component using its blueprint handler variable
 from app.mod_rest_service.controllers import mod_rest_service as rest_service_module
 from app.mod_auth.controllers import mod_auth as auth_module
+from app.mod_site.controllers import mod_site as site_module
 
 # Import blueprints
 app.register_blueprint(rest_service_module)
 app.register_blueprint(auth_module)
+app.register_blueprint(site_module)
 
 # Build the database:
 # This will create the database file using SQLAlchemy
