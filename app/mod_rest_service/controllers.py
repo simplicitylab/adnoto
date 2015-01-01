@@ -67,6 +67,32 @@ def create_new_notebook():
         return jsonify({'status' : 'error while creating a new notebook'})
 
 
+@mod_rest_service.route('/notebook/<notebook_id>', methods=['DELETE'])
+@login_required
+def delete_notebook(notebook_id):
+    '''
+    This endpoint deletes a notebook
+    '''
+    try:
+        # get notebook
+        notebook = Notebook.query.filter(Notebook.id==notebook_id).first()
+
+        # if page is not found
+        if notebook == None:
+            return jsonify({'message': 'Notebook could not be found.'}), 400
+        else:
+            # remove notebook from database
+            db.session.delete(notebook)
+            db.session.commit()
+
+            # return json result
+            return jsonify({})
+    except Exception:
+        # return json result
+        return jsonify({'status' : 'error while delete a notebook'}), 400
+
+
+
 @mod_rest_service.route('/notebook/<notebook_id>/pages', methods=['GET'])
 @login_required
 def list_pages_notebook(notebook_id):
@@ -140,7 +166,7 @@ def get_page(notebook_id, page_id):
 
 @mod_rest_service.route('/notebook/<notebook_id>/page/<page_id>', methods=['DELETE'])
 @login_required
-def delete(notebook_id, page_id):
+def delete_page(notebook_id, page_id):
     '''
     This endpoint deletes a page
     '''

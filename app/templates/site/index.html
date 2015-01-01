@@ -18,7 +18,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                       Glenn De Backer 
+                       Glenn De Backer
                        <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
@@ -33,33 +33,33 @@
                 </li>
             </ul>
         </div>
-        
+
     </nav>
     <!-- end navigation bar -->
-    
-    <!-- main container -->    
+
+    <!-- main container -->
     <div id="main-container">
-       
+
        <!-- sidebar notebooks -->
         <div id="sidebar-notebooks-tags">
 
-           <h4 id="notebook-section-title"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Notebooks 
+           <h4 id="notebook-section-title"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Notebooks
                 <div id="add-notebook-container">
                     <a>+</a>
                 </div>
            </h4>
-           
+
             <div id="list-notebooks-container">
                 <ul id="list-notebooks">
                 </ul>
             </div>
-            
-        </div>   
+
+        </div>
        <!-- end sidebar notebooks -->
 
-       <!-- sidebar notes -->        
+       <!-- sidebar notes -->
         <div id="sidebar-notes">
-            
+
             <!-- content editor navbar -->
             <nav id="notes-navbar" class="navbar navbar-default" role="navigation">
                 <form class="navbar-form navbar-left" role="search">
@@ -71,10 +71,10 @@
                         New note
                     </button>
                 </form>
-                
-            </nav>     
+
+            </nav>
             <!-- end content editor navbar -->
-            
+
              <div id="list-group-container" class="list-group">
                   <a href="#" class="list-group-item red">
                     <h4 class="list-group-item-heading">Hello world</h4>
@@ -95,11 +95,11 @@
                   <a href="#" class="list-group-item purple">
                     <h4 class="list-group-item-heading">List group item heading</h4>
                     <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>     
+                  </a>
                   <a href="#" class="list-group-item gray">
                     <h4 class="list-group-item-heading">List group item heading</h4>
                     <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>    
+                  </a>
                   <a href="#" class="list-group-item red">
                     <h4 class="list-group-item-heading">Hello world</h4>
                     <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
@@ -107,7 +107,7 @@
                   <a href="#" class="list-group-item blue">
                     <h4 class="list-group-item-heading">Last item</h4>
                     <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </a>                                               
+                  </a>
             </div>
         </div>
         <!-- end sidebar notes -->
@@ -116,50 +116,50 @@
        <div id="content-editor-container">
             <!-- content editor navbar -->
             <nav id="editor-content-navbar" class="navbar navbar-default" role="navigation">
-                              
+
                 <form class="navbar-form navbar-left" role="edit">
-                   
+
                     <!-- color picker -->
                     <div id="note-color-picker" class="color_picker">
                         <div id="color-preview" class="circle big green"></div>
                     </div>
                     <!-- end color picker -->
-                    
+
                     <button id="btn-toggle-mode" type="button" class="btn btn-primary" disabled>
-                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> 
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                         Edit
                     </button>
                     <button id="btn-delete-note" type="button" class="btn btn-primary" disabled>
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                         Delete note
-                    </button>                   
+                    </button>
                     <button id="btn-save-note" type="button" class="btn btn-primary" disabled>
-                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> 
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                         Save note
                     </button>
                 </form>
 
-            </nav>     
+            </nav>
             <!-- end content editor navbar -->
             <h3 id="note-title" contenteditable="true"></h3>
-            
+
             <!-- content container -->
             <div id="content-container">
-                <div id="markdownEditor"></div>                              
-                <div id="markdownPreview"></div>                              
+                <div id="markdownEditor"></div>
+                <div id="markdownPreview"></div>
             </div>
             <!-- end content container -->
-            
+
         </div>
-       <!-- end content editor -->      
+       <!-- end content editor -->
 
 
     </div>
-    
-    
+
+
     <!-- hidden stuff -->
-    
-    <!-- notebook context menu -->    
+
+    <!-- notebook context menu -->
     <div id="notebook-context-menu">
         <ul class="dropdown-menu" role="menu">
             <li><a tabindex="-1" id="menu_notebook_rename">Rename</a></li>
@@ -167,8 +167,8 @@
             <li><a tabindex="-1">Settings</a></li>-->
         </ul>
     </div>
-    
-    
+
+
     <!-- new notebook dialog -->
     <div id="dlg-new-notebook" class="modal fade">
         <div class="modal-dialog">
@@ -183,7 +183,7 @@
                         <label for="notebook-name" class="control-label">Name of notebook:</label>
                         <input  type="text" class="form-control" id="dlg-new-notebook-input-notebook-name">
                       </div>
-                    </form>    
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -192,7 +192,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
+
     <!-- new note dialog -->
     <div id="dlg-new-note" class="modal fade">
         <div class="modal-dialog">
@@ -206,7 +206,7 @@
                       <div class="form-group">
                         <label for="note-title" class="control-label">Title of note:</label>
                         <input type="text" class="form-control" id="dlg-new-note-input-note-title">
-                      </div> 
+                      </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -214,8 +214,8 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->   
-    
+    </div><!-- /.modal -->
+
     <!-- delete notebook dialog -->
     <div id="dlg-delete-notebook" class="modal fade">
         <div class="modal-dialog">
@@ -229,8 +229,9 @@
                       <div class="form-group">
                         <label for="dlg-delete-notebook-input-notebook-name" class="control-label">Type name of notebook ( <span id="dlg-delete-noteboook-span-notebook-name"></span> ) :</label>
                         <input type="text" class="form-control" id="dlg-delete-notebook-input-notebook-name">
+                        <input type="hidden" id="dlg-delete-notebook-hidden-notebook-id">
                       </div>
-                    </form>    
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -239,7 +240,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
+
     <!-- delete note dialog -->
     <div id="dlg-delete-note" class="modal fade">
         <div class="modal-dialog">
@@ -254,7 +255,7 @@
                         <label for="dlg-delete-note-input-note-name" class="control-label">Type title of note ( <span id="dlg-delete-note-span-note-name"></span> ) :</label>
                         <input type="text" class="form-control" id="dlg-delete-note-input-note-name">
                       </div>
-                    </form>    
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -262,9 +263,9 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->      
-    
-                  
+    </div><!-- /.modal -->
+
+
     <!-- rename notebook dialog -->
     <div id="dlg-rename-notebook" class="modal fade">
         <div class="modal-dialog">
@@ -279,7 +280,7 @@
                         <label for="note-title" class="control-label">New notebook name :</label>
                         <input type="text" class="form-control" id="dlg-rename-notebook-input-notebook-name">
                       </div>
-                    </form>    
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -287,8 +288,8 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->                                              
-    
+    </div><!-- /.modal -->
+
 </body>
 <script src="{{ url_for('static', filename='js/thirdparty/jquery/jquery-1.11.1.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/thirdparty/underscore/underscore.min.js') }}"></script>

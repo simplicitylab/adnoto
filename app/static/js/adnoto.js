@@ -1,18 +1,19 @@
 var adnoto_app = {};
 var Note = Backbone.Model.extend({
     url:function(){ 
-        return 'test_json/note.json';
+       return 'test_json/note.json';
     },
 });
 var Notebook = Backbone.Model.extend({
+    urlRoot: 'api/v1/notebook'
 });
 var Notebooks = Backbone.Collection.extend({
 	model: Notebook,
     url: 'api/v1/notebooks',
+    //url: 'test_json/notebooks.json',
     parse : function(response){
         return response.notebooks;  
-    }    
-	//url: 'test_json/notebooks.json'
+    }
 });
 var Notes = Backbone.Collection.extend({
     
@@ -296,19 +297,29 @@ var NoteBooksView = Backbone.View.extend({
 
 	initialize: function(){
         
-        var self = this;
-
 		// assign 'internal' collection to new SongsCollection
 		this.collection = new Notebooks();
-	
-		// fetch collection on success render view
-		this.collection.fetch({
-			success: function(collection) {
-				self.render();
-			} 
-		});
-        
+	        
+        // refresh notebooks
+        this.refreshNotebooks();
 	},
+    
+    /**
+     * refresh notebooks
+     **/
+    refreshNotebooks: function(){
+        
+        var self = this;
+
+        if (this.collection != undefined ) {
+            // fetch collection on success render view
+            this.collection.fetch({
+                success: function(collection) {
+                    self.render();
+                } 
+            });
+        }
+    },
     
     events: {
         // handle name click
@@ -335,6 +346,9 @@ var NoteBooksView = Backbone.View.extend({
             // get notebook name and pass it to the dialog
             var notebook_name = $(event.target).next('a').html();
             $('#dlg-delete-noteboook-span-notebook-name').html(notebook_name);
+            
+            // store note id
+            $('#dlg-delete-notebook-hidden-notebook-id').val(notebook_id);
             
             // show delete notebook dialog
             $('#dlg-delete-notebook').modal('show');
@@ -536,19 +550,28 @@ $(document).ready(function(){
     // dialog new notebook
     $('#dlg-new-notebook-btn-create').bind('click', function() {
         // get noteboook name
-        var notebook_name = $('#dlg-input-notebook-name').val();
+        var notebook_name = $('#dlg-new-notebook-input-notebook-name').val();
 
         if (notebook_name.length > 0 ) {
             
             // hide dialog
             $('#dlg-new-notebook').modal('hide');
 
-            console.log('create new notebook : ' + notebook_name);
+            // create new notebook
+            var notebook = new Notebook();
+            notebook.set({ 'name' : notebook_name});
+            
+            // save in dbase
+            notebook.save();
+            
+            // refresh list
+            adnoto_app.notebooksListView.refreshNotebooks();
         }
     });
     
     // dialog delete notebook
-    $('#dlg-delete-notebook-btn-delete-note').bind('click', function() {
+    $('#dlg-delete-notebook-btn-delete').bind('click', function() {
+                
         // get notebook name        
         var notebook_name = $('#dlg-delete-noteboook-span-notebook-name').html();
 
@@ -556,6 +579,18 @@ $(document).ready(function(){
         if( notebook_name == $('#dlg-delete-notebook-input-notebook-name').val() ) {
             // hide dialog
             $('#dlg-delete-notebook').modal('hide');
+            
+            // get note id 
+            var note_id = $('#dlg-delete-notebook-hidden-notebook-id').val();
+            
+            // find notebook
+            var notebook = new Notebook({ id: note_id});
+            
+            // delete
+            notebook.destroy();
+            
+            // refresh notebooks list
+            adnoto_app.notebooksListView.refreshNotebooks();
         }
         
     });        
