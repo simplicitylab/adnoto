@@ -65,6 +65,7 @@ class Notebook(Base):
         Default constructor
         """
         self.name = name
+        self.number_notes = 0;
 
 ##### SCHEMAS #####
 

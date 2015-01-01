@@ -1,4 +1,3 @@
-var adnoto_app = {};
 var Note = Backbone.Model.extend({
     url:function(){ 
        return 'test_json/note.json';
@@ -461,7 +460,6 @@ adnoto_app.enableContentButtons = function() {
     $('#btn-delete-note').removeAttr('disabled');
     $('#btn-save-note').removeAttr('disabled');
 };
-
 
 /**
  * setup Views‡
