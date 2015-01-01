@@ -1,5 +1,333 @@
-{% extends "site/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adnoto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <!-- navigation bar -->
+    <nav id="top-navbar" class="navbar navbar-inverse navbar-fixed-top">
+       <div id="topbar-container">
+            <div class="navbar-header">
+                  <a class="navbar-brand" href="#">Adnoto</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                       Glenn De Backer 
+                       <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                     <!--   <li>
+                            <a href="#"><i class="fa fa-cog"></i>&nbsp;Settings</a>
+                        </li>
+                        <li class="divider"></li>-->
+                        <li>
+                            <a href="#"><i class="fa fa-power-off"></i>&nbsp;Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+    </nav>
+    <!-- end navigation bar -->
+    
+    <!-- main container -->    
+    <div id="main-container">
+       
+       <!-- sidebar notebooks -->
+        <div id="sidebar-notebooks-tags">
 
-{% block content %}
-    hello world
-{% endblock %}
+           <h4 id="notebook-section-title"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Notebooks 
+                <div id="add-notebook-container">
+                    <a>+</a>
+                </div>
+           </h4>
+           
+            <div id="list-notebooks-container">
+                <ul id="list-notebooks">
+                </ul>
+            </div>
+            
+        </div>   
+       <!-- end sidebar notebooks -->
+
+       <!-- sidebar notes -->        
+        <div id="sidebar-notes">
+            
+            <!-- content editor navbar -->
+            <nav id="notes-navbar" class="navbar navbar-default" role="navigation">
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input id="input-search" type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button id="btn-new-note" type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        New note
+                    </button>
+                </form>
+                
+            </nav>     
+            <!-- end content editor navbar -->
+            
+             <div id="list-group-container" class="list-group">
+                  <a href="#" class="list-group-item red">
+                    <h4 class="list-group-item-heading">Hello world</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>
+                  <a href="#" class="list-group-item blue">
+                    <h4 class="list-group-item-heading"> List group item heading</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>
+                  <a href="#" class="list-group-item green">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>
+                  <a href="#" class="list-group-item orange">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>
+                  <a href="#" class="list-group-item purple">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>     
+                  <a href="#" class="list-group-item gray">
+                    <h4 class="list-group-item-heading">List group item heading</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>    
+                  <a href="#" class="list-group-item red">
+                    <h4 class="list-group-item-heading">Hello world</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>
+                  <a href="#" class="list-group-item blue">
+                    <h4 class="list-group-item-heading">Last item</h4>
+                    <p class="list-group-item-text"><span class="date">14/03/2014</span>Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </a>                                               
+            </div>
+        </div>
+        <!-- end sidebar notes -->
+
+       <!-- content editor -->
+       <div id="content-editor-container">
+            <!-- content editor navbar -->
+            <nav id="editor-content-navbar" class="navbar navbar-default" role="navigation">
+                              
+                <form class="navbar-form navbar-left" role="edit">
+                   
+                    <!-- color picker -->
+                    <div id="note-color-picker" class="color_picker">
+                        <div id="color-preview" class="circle big green"></div>
+                    </div>
+                    <!-- end color picker -->
+                    
+                    <button id="btn-toggle-mode" type="button" class="btn btn-primary" disabled>
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> 
+                        Edit
+                    </button>
+                    <button id="btn-delete-note" type="button" class="btn btn-primary" disabled>
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
+                        Delete note
+                    </button>                   
+                    <button id="btn-save-note" type="button" class="btn btn-primary" disabled>
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> 
+                        Save note
+                    </button>
+                </form>
+
+            </nav>     
+            <!-- end content editor navbar -->
+            <h3 id="note-title" contenteditable="true"></h3>
+            
+            <!-- content container -->
+            <div id="content-container">
+                <div id="markdownEditor"></div>                              
+                <div id="markdownPreview"></div>                              
+            </div>
+            <!-- end content container -->
+            
+        </div>
+       <!-- end content editor -->      
+
+
+    </div>
+    
+    
+    <!-- hidden stuff -->
+    
+    <!-- notebook context menu -->    
+    <div id="notebook-context-menu">
+        <ul class="dropdown-menu" role="menu">
+            <li><a tabindex="-1" id="menu_notebook_rename">Rename</a></li>
+            <!--<li class="divider"></li>
+            <li><a tabindex="-1">Settings</a></li>-->
+        </ul>
+    </div>
+    
+    
+    <!-- new notebook dialog -->
+    <div id="dlg-new-notebook" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Create new notebook</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label for="notebook-name" class="control-label">Name of notebook:</label>
+                        <input  type="text" class="form-control" id="dlg-new-notebook-input-notebook-name">
+                      </div>
+                    </form>    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="dlg-new-notebook-btn-create" type="button" class="btn btn-primary">Create notebook</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    <!-- new note dialog -->
+    <div id="dlg-new-note" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Create new note</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label for="note-title" class="control-label">Title of note:</label>
+                        <input type="text" class="form-control" id="dlg-new-note-input-note-title">
+                      </div> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="dlg-new-note-btn-create" type="button" class="btn btn-primary">Create note</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->   
+    
+    <!-- delete notebook dialog -->
+    <div id="dlg-delete-notebook" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Are you sure you want to delete this notebook?</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label for="dlg-delete-notebook-input-notebook-name" class="control-label">Type name of notebook ( <span id="dlg-delete-noteboook-span-notebook-name"></span> ) :</label>
+                        <input type="text" class="form-control" id="dlg-delete-notebook-input-notebook-name">
+                      </div>
+                    </form>    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="dlg-delete-notebook-btn-delete" type="button" class="btn btn-primary">Delete notebook</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    <!-- delete note dialog -->
+    <div id="dlg-delete-note" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Are you sure you want to delete this note?</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label for="dlg-delete-note-input-note-name" class="control-label">Type title of note ( <span id="dlg-delete-note-span-note-name"></span> ) :</label>
+                        <input type="text" class="form-control" id="dlg-delete-note-input-note-name">
+                      </div>
+                    </form>    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="dlg-delete-note-btn-delete-note" type="button" class="btn btn-primary">Delete notebook</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->      
+    
+                  
+    <!-- rename notebook dialog -->
+    <div id="dlg-rename-notebook" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Rename notebook</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label for="note-title" class="control-label">New notebook name :</label>
+                        <input type="text" class="form-control" id="dlg-rename-notebook-input-notebook-name">
+                      </div>
+                    </form>    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="dlg-new-note-btn-create" type="button" class="btn btn-primary">Rename notebook</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->                                              
+    
+</body>
+<script src="{{ url_for('static', filename='js/thirdparty/jquery/jquery-1.11.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/underscore/underscore.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/backbone/backbone.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/bootstrap/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/bootstrap/bootstrap-contextmenu.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/commonmark/commonmark.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/codemirror/codemirror.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/codemirror/xml/xml.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/codemirror/markdown/markdown.js') }}"></script>
+<script src="{{ url_for('static', filename='js/thirdparty/prism/prism.js') }}"></script>
+<script src="{{ url_for('static', filename='js/adnoto.js') }}"></script>
+
+<!-- templates -->
+<script id="template-color-picker" type="text/template" >
+    <div class="circle small red"    data-note-color="red"></div>
+    <div class="circle small green"  data-note-color="green"></div>
+    <div class="circle small blue"   data-note-color="blue"></div>
+    <div class="circle small orange" data-note-color="orange"></div>
+    <div class="circle small purple" data-note-color="purple"></div>
+</script>
+
+<script id="template-notebooks-list" type="text/template" >
+    <% _.each(notebooks, function(notebook) { %>
+        <li>
+            <i class="fa fa-times delete-notebook" data-notebook-id="<%= notebook.get('id') %>"></i>
+            <a class="name"  data-notebook-id="<%= notebook.get('id') %>" data-toggle="context" data-target="#notebook-context-menu"><%= notebook.get('name') %></a> 
+            <span class="badge"><%= notebook.get('number_notes') %></span>
+        </li>
+    <% }); %>
+</script>
+
+<script id="template-notes-list" type="text/template" >
+    <% _.each(notes, function(note) { %>
+        <a href="#" data-note-id="<%= note.get('id') %>" class="list-group-item <%= note.get('color') %>">
+            <h4 class="list-group-item-heading"><%= note.get('title') %></h4>
+            <p class="list-group-item-text"><span class="date"><%= note.get('date') %></span><%= note.get('preview') %></p>
+        </a>
+    <% }); %>
+</script>
+
+</html>

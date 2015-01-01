@@ -54,6 +54,9 @@ class Notebook(Base):
     # Notebook Name
     name    = db.Column(db.String(128),  nullable=False)
 
+    # Number of notes
+    number_notes    = db.Column(db.Integer)
+
     # Pages children
     pages = db.relationship("Page")
 
@@ -78,7 +81,7 @@ class NotebookSchema(Schema):
     name = fields.Str(required=True, validate=must_not_be_blank)
 
     class Meta:
-        fields = ("id", "date_created", "date_modified", 'name')
+        fields = ("id", "date_created", "date_modified", 'name', 'number_notes')
 
 # Page schema
 class PageSchema(Schema):
