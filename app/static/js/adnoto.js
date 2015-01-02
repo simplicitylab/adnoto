@@ -20,7 +20,17 @@ var Note = Backbone.Model.extend({
     }
 });
 var Notebook = Backbone.Model.extend({
-    urlRoot: 'api/v1/notebook'
+    urlRoot: 'api/v1/notebook',
+    
+    parse : function(response, options){
+        // when fetched occures from collection
+        if (options.collection){
+            return response;
+        }else {
+            return response.notebook;  
+        }
+    },
+    
 });
 var Notebooks = Backbone.Collection.extend({
 	model: Notebook,
@@ -127,7 +137,6 @@ var NoteColorPickerView = Backbone.View.extend({
 
 var NoteView = Backbone.View.extend({
 
-    //el: $('#content-container'),
 
     /**
      * Initialize
@@ -181,11 +190,16 @@ var NoteView = Backbone.View.extend({
         $('#note-title').html('');
         
         // reset markdown preview
-        this.markdownContent.html('');
+        $('#markdownPreview').html('');
         
         // reset markdown editor
-        this.markdownEditor.setValue('');        
+        this.markdownEditor.setValue('');      
+        
+        // reset buttons
+        adnoto_app.disableContentButtons();
     },
+    
+    
     
     /**
      * Show note content
@@ -242,26 +256,40 @@ var NoteView = Backbone.View.extend({
     },
     
     /**
-     * Save note
+     * Get note
      **/
-    saveNote: function() {
-        
-        var self = this;
-        
-        // update
-        this.note.set({
-            "title": $('#note-title').html(),
-            "color": self.color,
-            "content": self.markdownEditor.getValue()
-        });
-        
-        // save note
-        this.note.save();
-        
-        // refresh notes list
-        adnoto_app.notesListView.refreshNotes();
+    getNote: function() {
+        return this.note;
     },
     
+    /**
+     * Get note id
+     **/
+    getNoteId: function() {
+        return this.note_id;
+    },    
+    
+    /**
+     * Get title
+     **/
+    getTitle: function() {
+        return $('#note-title').html();
+    },
+    
+    /**
+     * Get color
+     **/
+    getColor: function() {
+        return this.color;
+    },
+    
+    
+    /**
+     * Get content
+     **/
+    getContent: function() {
+        return this.markdownEditor.getValue();
+    },
     
     /**
      * Toggle mode
@@ -361,6 +389,7 @@ var NoteBooksView = Backbone.View.extend({
             // fetch collection on success render view
             this.collection.fetch({
                 success: function(collection) {
+                    // render 
                     self.render();
                 } 
             });
@@ -385,6 +414,9 @@ var NoteBooksView = Backbone.View.extend({
             
             // update notes list
             adnoto_app.notesListView.showNotes(notebook_id);
+            
+            // reset node view
+            adnoto_app.noteView.resetNote();
         },
         // handle delete click
         'click i.delete-notebook': function(event) {
@@ -408,11 +440,15 @@ var NoteBooksView = Backbone.View.extend({
     },
 
 	render: function() {
+        
         // get template
 		var template = _.template($('#template-notebooks-list').html());
         
 		// render compiled html to element
-		this.$el.html(template({ notebooks: this.collection.models }));
+		this.$el.html(template({ notebooks: this.collection.models,
+                                 active_notebook_id : adnoto_app.active_notebook_id
+        }));
+        
 	}
     
     
@@ -444,6 +480,15 @@ var NotesView = Backbone.View.extend({
 			} 
 		});
 
+    },
+    
+    
+    /**
+     * Reset notes
+     **/
+    resetNotes: function() {
+        // remove notes
+        $('#list-group-container').html('');
     },
     
     /**
@@ -616,7 +661,16 @@ $(document).ready(function(){
     });
     
     $('#btn-save-note').bind('click', function() {
-        adnoto_app.noteView.saveNote();
+        
+        // update note
+        adnoto_app.noteView.getNote().set({
+            "title": adnoto_app.noteView.getTitle(),
+            "color": adnoto_app.noteView.getColor(),
+            "content": adnoto_app.noteView.getContent()
+        });
+        
+        adnoto_app.noteView.getNote().save();
+    
     });    
     
     // add on keyup event for searchbox
@@ -644,11 +698,25 @@ $(document).ready(function(){
             notebook.set({ 'name' : notebook_name});
             
             // save in dbase
-            notebook.save();
-            
-            // refresh list
-            adnoto_app.notebooksListView.refreshNotebooks();
-        }
+            notebook.save(null, {  
+                // on success
+                success: function (model, response) {
+                                        
+                    // set active notebook
+                    adnoto_app.active_notebook_id = model.id;
+                                        
+                    // refresh list
+                    adnoto_app.notebooksListView.refreshNotebooks();
+                    
+                    // reset notes
+                    adnoto_app.notesListView.resetNotes();
+                    
+                    // reset not
+                    adnoto_app.noteView.resetNote();
+                    
+                }
+            });
+                    }
     });
     
     // dialog delete notebook
@@ -693,10 +761,13 @@ $(document).ready(function(){
             note.set({ 'title' : note_title, 'content': ''});
             
             // save in dbase
-            note.save();
-            
-            // refresh note
-            adnoto_app.notesListView.refreshNotes();
+            note.save(null, {
+                // on success
+                success: function (model, response) {                    
+                    // refresh list
+                    adnoto_app.notesListView.refreshNotes();
+                }
+            });
         }
         
     });   
@@ -716,16 +787,13 @@ $(document).ready(function(){
             // hide dialog
             $('#dlg-delete-note').modal('hide');
             
-            // delete note
-            var note = new Note({id : note_id});
+            // destroy note
+            adnoto_app.noteView.getNote().destroy();
             
-            // remove note 
-            note.destroy();
-
             // refresh note
             adnoto_app.notesListView.refreshNotes();
             
-            // reset not
+            // reset note
             adnoto_app.noteView.resetNote();
         }
         

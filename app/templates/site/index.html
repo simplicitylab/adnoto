@@ -285,15 +285,17 @@
     <div class="circle small purple" data-note-color="purple"></div>
 </script>
 
+
 <script id="template-notebooks-list" type="text/template" >
     <% _.each(notebooks, function(notebook) { %>
-        <li>
+        <li class="<%= active_notebook_id === notebook.get('id') ?  'active' : '' %>" >
             <i class="fa fa-times delete-notebook" data-notebook-id="<%= notebook.get('id') %>"></i>
-            <a class="name"  data-notebook-id="<%= notebook.get('id') %>" data-toggle="context" data-target="#notebook-context-menu"><%= notebook.get('name') %></a> 
+            <a class="name"  data-notebook-id="<%= notebook.get('id') %>" data-toggle="context" data-target="#notebook-context-menu"><%= notebook.get('name') %></a>
             <span class="badge"><%= notebook.get('number_notes') %></span>
         </li>
     <% }); %>
 </script>
+
 
 <script id="template-notes-list" type="text/template" >
     <% _.each(notes, function(note) { %>

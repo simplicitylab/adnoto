@@ -63,9 +63,9 @@ def create_new_notebook():
         # serialize sqlalchemy data
         serializer = NotebookSchema(many=False)
         result = serializer.dump(new_notebook)
-        
+
         # return json result
-        return jsonify({"note" : result.data})
+        return jsonify({"notebook" : result.data})
     except Exception:
         # return json result
         return jsonify({'status' : 'error while creating a new notebook'})
