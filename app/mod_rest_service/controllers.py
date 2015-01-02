@@ -60,8 +60,12 @@ def create_new_notebook():
         db.session.add(new_notebook)
         db.session.commit()
 
+        # serialize sqlalchemy data
+        serializer = NotebookSchema(many=False)
+        result = serializer.dump(new_notebook)
+        
         # return json result
-        return jsonify({})
+        return jsonify({"note" : result.data})
     except Exception:
         # return json result
         return jsonify({'status' : 'error while creating a new notebook'})
