@@ -95,6 +95,39 @@ def delete_notebook(notebook_id):
         # return json result
         return jsonify({'status' : 'error while delete a notebook'}), 400
 
+@mod_rest_service.route('/notebook/<notebook_id>', methods=['PUT'])
+@login_required
+def update_notebook(notebook_id):
+    '''
+    This endpoint updates a notebook
+    '''
+    try:
+        # get notebook
+        notebook = Notebook.query.filter(Notebook.id==notebook_id).first()
+
+        # if notebook is not found
+        if notebook is None:
+            return jsonify({'message': 'Notebook could not be found.'}), 400
+        else:
+
+            # get json request data
+            json_data =  request.get_json()
+
+            notebook.name = json_data["name"]
+
+            # update
+            db.session.commit()
+
+            # serialize sqlalchemy data
+            serializer = NotebookSchema(many=False)
+            result = serializer.dump(notebook)
+
+            # return json result
+            return jsonify({'notebook': result.data})
+        
+    except Exception:
+        # return json result
+        return jsonify({'status' : 'error while updating notebook'}), 400
 
 
 @mod_rest_service.route('/notebook/<notebook_id>/notes', methods=['GET'])

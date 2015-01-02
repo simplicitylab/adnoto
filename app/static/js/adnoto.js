@@ -223,6 +223,9 @@ var NoteView = Backbone.View.extend({
                 // get color
                 self.color = model.get('color');
                 
+                // set color picker color
+                adnoto_app.noteColorPickerView.setColor(self.color);
+                
                 // get markdown content
                 self.markdownEditor.setValue(model.get('content'));
                 
@@ -370,10 +373,7 @@ var NoteBooksView = Backbone.View.extend({
 	el: $('#list-notebooks'),
 
 	initialize: function(){
-        
-		// assign 'internal' collection to new SongsCollection
-		this.collection = new Notebooks();
-	        
+        	        
         // refresh notebooks
         this.refreshNotebooks();
 	},
@@ -384,6 +384,8 @@ var NoteBooksView = Backbone.View.extend({
     refreshNotebooks: function(){
         
         var self = this;
+        
+        this.collection = new Notebooks();
 
         if (this.collection != undefined ) {
             // fetch collection on success render view
@@ -626,9 +628,28 @@ $(document).ready(function(){
     });
 
     /**
-     * Setup context menu
+     * Handle notebook context menu
      **/
-    $('#menu_notebook_rename').bind('click', function() {
+    $(window).mousedown(function(event){ 
+                
+        // be sure it is a right click on a notebook item
+        if ( $(event.target).hasClass('notebook-item') && event.button == 2 ) {
+            // store right click id 
+            adnoto_app.right_click_notebook_id = $(event.target).data('notebook-id');            
+        } 
+        
+        return true; 
+    }); 
+    
+    $('#menu_notebook_rename').bind('click', function(event) {        
+        
+        // find notebook with id 
+        var notebook_name = $('#list-notebooks')
+                            .find('a[data-notebook-id="' +  adnoto_app.right_click_notebook_id +'"]')
+                            .html();
+        
+        // set notebook name
+        $('#dlg-rename-notebook-span-notebook-name').html(notebook_name);
         
         // reset input
         $('#dlg-rename-notebook-input-notebook-name').val('');
@@ -674,8 +695,12 @@ $(document).ready(function(){
             "content": adnoto_app.noteView.getContent()
         });
         
+        // save note
         adnoto_app.noteView.getNote().save();
     
+        // refresh note
+        adnoto_app.notesListView.refreshNotes();
+        
     });    
     
     // add on keyup event for searchbox
@@ -693,6 +718,7 @@ $(document).ready(function(){
         // get noteboook name
         var notebook_name = $('#dlg-new-notebook-input-notebook-name').val();
 
+        // be sure that notebook name is given
         if (notebook_name.length > 0 ) {
             
             // hide dialog
@@ -810,7 +836,36 @@ $(document).ready(function(){
             adnoto_app.noteView.resetNote();
         }
         
-    });        
+    });     
+    
+    // dialog to rename notebook
+    $('#dlg-new-note-btn-rename').bind('click', function() {
+
+        // get new note name
+        var new_note_name = $('#dlg-rename-notebook-input-notebook-name').val();
+        
+        // be sure that new note name is given
+        if (new_note_name.length > 0 ) {
+            
+            // update notebook
+            var notebook = new Notebook({id: adnoto_app.right_click_notebook_id});
+            notebook.set({ 'name' : new_note_name});
+            
+            notebook.save(null, {
+                // on success
+                success: function (model, response) {  
+                    
+                    // hide dialog 
+                    $('#dlg-rename-notebook').modal('hide');                    
+                    
+                    // refresh notebooks list
+                    adnoto_app.notebooksListView.refreshNotebooks();
+                }
+            });
+        }
+        
+    });     
+    
     
         
     // setup views 

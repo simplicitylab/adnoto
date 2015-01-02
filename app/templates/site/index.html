@@ -245,7 +245,7 @@
                 <div class="modal-body">
                     <form>
                       <div class="form-group">
-                        <label for="note-title" class="control-label">New notebook name :</label>
+                        <label for="note-title" class="control-label">New notebook name ( old name: <span id="dlg-rename-notebook-span-notebook-name"></span> ) :</label>
                         <input type="text" class="form-control" id="dlg-rename-notebook-input-notebook-name">
                       </div>
                     </form>
@@ -263,6 +263,8 @@
     var adnoto_app = {};
 
     adnoto_app.active_notebook_id = null;
+    adnoto_app.active_note_id = null;
+    adnoto_app.right_click_notebook_id = null;
 </script>
 <script src="{{ url_for('static', filename='js/thirdparty/jquery/jquery-1.11.1.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/thirdparty/underscore/underscore.min.js') }}"></script>
@@ -285,12 +287,11 @@
     <div class="circle small purple" data-note-color="purple"></div>
 </script>
 
-
 <script id="template-notebooks-list" type="text/template" >
     <% _.each(notebooks, function(notebook) { %>
-        <li class="<%= active_notebook_id === notebook.get('id') ?  'active' : '' %>" >
+        <li class="<%= active_notebook_id === notebook.get('id') ?  'active' : '' %>" data-notebook-id="<%= notebook.get('id') %>">
             <i class="fa fa-times delete-notebook" data-notebook-id="<%= notebook.get('id') %>"></i>
-            <a class="name"  data-notebook-id="<%= notebook.get('id') %>" data-toggle="context" data-target="#notebook-context-menu"><%= notebook.get('name') %></a>
+            <a class="notebook-item name"  data-notebook-id="<%= notebook.get('id') %>" data-toggle="context" data-target="#notebook-context-menu"><%= notebook.get('name') %></a>
             <span class="badge"><%= notebook.get('number_notes') %></span>
         </li>
     <% }); %>
