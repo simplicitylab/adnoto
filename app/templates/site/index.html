@@ -299,11 +299,13 @@
 
 <script id="template-notes-list" type="text/template" >
     <% _.each(notes, function(note) { %>
-        <a href="#" data-note-id="<%= note.get('id') %>" class="list-group-item <%= note.get('color') %>">
+        <a href="#" data-note-id="<%= note.get('id') %>" class="list-group-item
+            <%= active_note_id === note.get('id') ?  'active' : '' %> <%= note.get('color') %>">
             <h4 class="list-group-item-heading"><%= note.get('title') %></h4>
             <p class="list-group-item-text"><span class="date"><%= note.get('date') %></span><%= note.get('preview') %></p>
         </a>
     <% }); %>
 </script>
+
 
 </html>

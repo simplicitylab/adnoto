@@ -541,7 +541,7 @@ var NotesView = Backbone.View.extend({
             
             // add active class
             $(event.currentTarget).addClass('active');
-            
+                        
             // show note
             adnoto_app.noteView.showNote(note_id);
 
@@ -566,8 +566,13 @@ var NotesView = Backbone.View.extend({
             this.$el.html(template({ notes: filtered_collection }));
             
         } else {
+            
             // render compiled html to element
-            this.$el.html(template({ notes: this.collection.models }));
+            this.$el.html(template({ 
+                notes: this.collection.models,
+                active_note_id: adnoto_app.active_note_id 
+            }));
+            
         }
 	}
     
@@ -763,9 +768,17 @@ $(document).ready(function(){
             // save in dbase
             note.save(null, {
                 // on success
-                success: function (model, response) {                    
+                success: function (model, response) {  
+                                        
+                    // set active note
+                    adnoto_app.active_note_id = model.id;
+                    
                     // refresh list
                     adnoto_app.notesListView.refreshNotes();
+                    
+                    // show note
+                    adnoto_app.noteView.showNote(model.id);
+                    
                 }
             });
         }

@@ -137,8 +137,12 @@ def create_new_note(notebook_id):
         db.session.add(new_note)
         db.session.commit()
 
+         # serialize sqlalchemy data
+        serializer =  NoteSchema()
+        result = serializer.dump(new_note)
+
         # return json result
-        return jsonify({})
+        return jsonify({'note' : result.data})
     except Exception as ex:
         print ex
         # return json result
