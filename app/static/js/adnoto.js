@@ -171,6 +171,22 @@ var NoteView = Backbone.View.extend({
         this.color = color;
     },
     
+    
+    /**
+     * Reset not
+     **/
+    resetNote: function() {
+        
+        // reset title
+        $('#note-title').html('');
+        
+        // reset markdown preview
+        this.markdownContent.html('');
+        
+        // reset markdown editor
+        this.markdownEditor.setValue('');        
+    },
+    
     /**
      * Show note content
      **/
@@ -189,6 +205,9 @@ var NoteView = Backbone.View.extend({
                 
                 // set title 
                 $('#note-title').html(model.get('title'));
+                
+                // get color
+                self.color = model.get('color');
                 
                 // get markdown content
                 self.markdownEditor.setValue(model.get('content'));
@@ -226,7 +245,21 @@ var NoteView = Backbone.View.extend({
      * Save note
      **/
     saveNote: function() {
-        console.log('save note ' + this.note_id);
+        
+        var self = this;
+        
+        // update
+        this.note.set({
+            "title": $('#note-title').html(),
+            "color": self.color,
+            "content": self.markdownEditor.getValue()
+        });
+        
+        // save note
+        this.note.save();
+        
+        // refresh notes list
+        adnoto_app.notesListView.refreshNotes();
     },
     
     
@@ -505,6 +538,16 @@ adnoto_app.enableContentButtons = function() {
 };
 
 /**
+ * Disable content related buttons
+ **/
+adnoto_app.disableContentButtons = function() {
+    $('#btn-toggle-mode').attr('disabled', true);
+    $('#btn-delete-note').attr('disabled', true);
+    $('#btn-save-note').attr('disabled', true);
+};
+
+
+/**
  * setup Views‡
  **/
 var setupViews = function() {
@@ -681,6 +724,9 @@ $(document).ready(function(){
 
             // refresh note
             adnoto_app.notesListView.refreshNotes();
+            
+            // reset not
+            adnoto_app.noteView.resetNote();
         }
         
     });        

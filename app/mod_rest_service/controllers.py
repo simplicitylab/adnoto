@@ -7,7 +7,7 @@ from app import db
 # Import form-login required decorator
 from flask.ext.login import login_required
 
-# Import module models and schema Notebook, Page
+# Import module models and schema Notebook, Note
 from app.mod_rest_service.models import Notebook
 from app.mod_rest_service.models import NotebookSchema
 
@@ -77,7 +77,7 @@ def delete_notebook(notebook_id):
         # get notebook
         notebook = Notebook.query.filter(Notebook.id==notebook_id).first()
 
-        # if page is not found
+        # if notebook is not found
         if notebook is None:
             return jsonify({'message': 'Notebook could not be found.'}), 400
         else:
@@ -95,9 +95,9 @@ def delete_notebook(notebook_id):
 
 @mod_rest_service.route('/notebook/<notebook_id>/notes', methods=['GET'])
 @login_required
-def list_pages_notebook(notebook_id):
+def list_notes_notebook(notebook_id):
     '''
-    This endpoint returns all pages within a notebook
+    This endpoint returns all notes within a notebook
     '''
     try:
         # gets all notes from notebook
@@ -111,12 +111,13 @@ def list_pages_notebook(notebook_id):
         return jsonify({'notes': result.data})
     except Exception:
         # return json result
-        return jsonify({'status' : 'error while listing pages'}), 400
+        return jsonify({'status' : 'error while listing notes'}), 400
+
 
 @mod_rest_service.route('/notebook/<notebook_id>/note', methods=['POST'])
 def create_new_note(notebook_id):
     '''
-    This endpoint creates a new page in a notebook
+    This endpoint creates a new note in a notebook
     '''
     try:
         # get json request data
@@ -144,19 +145,19 @@ def create_new_note(notebook_id):
 @login_required
 def get_note(notebook_id, note_id):
     '''
-    This endpoint gets the page information
+    This endpoint gets the note information
     '''
     try:
-        # gets  page from notebook
-        page = Note.query.filter(Note.notebook_id==notebook_id, Note.id==note_id).first()
+        # gets  note from notebook
+        note = Note.query.filter(Note.notebook_id==notebook_id, Note.id==note_id).first()
 
-        # if page is not found
-        if page is None:
+        # if note is not found
+        if note is None:
             return jsonify({'message': 'Note could not be found.'}), 400
         else:
              # serialize sqlalchemy data
             serializer =  NoteSchema()
-            result = serializer.dump(page)
+            result = serializer.dump(note)
 
             # return json result
             return jsonify({'note': result.data})
@@ -165,21 +166,60 @@ def get_note(notebook_id, note_id):
         return jsonify({'status' : 'error while getting content of note'}), 400
 
 
+@mod_rest_service.route('/notebook/<notebook_id>/note/<note_id>', methods=['PUT'])
+@login_required
+def update_note(notebook_id, note_id):
+    '''
+    This endpoint updates note
+    '''
+    try:
+
+        # get json request data
+        json_data =  request.get_json()
+
+        print json_data
+
+        # gets note from notebook
+        note = Note.query.filter(Note.notebook_id==notebook_id, Note.id==note_id).first()
+
+        # if note is not found
+        if note is None:
+            return jsonify({'message': 'Note could not be found.'}), 400
+        else:
+
+            # update note
+            note.title   = json_data['title']
+            note.content = json_data['content']
+            note.color   = json_data['color']
+
+            db.session.commit()
+
+             # serialize sqlalchemy data
+            serializer =  NoteSchema()
+            result = serializer.dump(note)
+
+            # return json result
+            return jsonify({'note': result.data})
+    except Exception:
+        # return json result
+        return jsonify({'status' : 'error while update content of note'}), 400
+
+
 @mod_rest_service.route('/notebook/<notebook_id>/note/<note_id>', methods=['DELETE'])
 @login_required
 def delete_note(notebook_id, note_id):
     '''
-    This endpoint deletes a page
+    This endpoint deletes a note
     '''
     try:
         # gets note from notebook
         note = Note.query.filter(Note.notebook_id==notebook_id, Note.id==note_id).first()
 
-        # if page is not found
+        # if note is not found
         if note == None:
             return jsonify({'message': 'Note could not be found.'}), 400
         else:
-            # remove page from database
+            # remove note from database
             db.session.delete(note)
             db.session.commit()
 
