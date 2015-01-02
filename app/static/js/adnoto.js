@@ -411,6 +411,9 @@ var NoteBooksView = Backbone.View.extend({
             // add active class to parent
             $(event.target).closest('li').addClass('active');
             
+            // enable new note button
+            adnoto_app.enableNoteButtons();
+            
             // store notebook id
             adnoto_app.active_notebook_id = notebook_id;
             
@@ -425,7 +428,7 @@ var NoteBooksView = Backbone.View.extend({
             
             // get notebook id
             var notebook_id = $(event.target).data('notebook-id');
-            
+                        
             // clear input
             $('#dlg-delete-notebook-input-notebook-name').val('');
             
@@ -438,6 +441,7 @@ var NoteBooksView = Backbone.View.extend({
             
             // show delete notebook dialog
             $('#dlg-delete-notebook').modal('show');
+                        
         }        
     },
 
@@ -598,6 +602,20 @@ adnoto_app.disableContentButtons = function() {
     $('#btn-save-note').attr('disabled', true);
 };
 
+/**
+ * Enable note related buttons
+ **/
+adnoto_app.enableNoteButtons = function() {
+    $('#btn-new-note').removeAttr('disabled');
+};
+
+
+/**
+ * Disable note related buttons
+ **/
+adnoto_app.disableNoteButtons = function() {
+    $('#btn-new-note').attr('disabled', true);    
+};
 
 /**
  * setup Views‡
@@ -760,9 +778,15 @@ $(document).ready(function(){
         if( notebook_name == $('#dlg-delete-notebook-input-notebook-name').val() ) {
             // hide dialog
             $('#dlg-delete-notebook').modal('hide');
-            
+                        
             // get notebook id 
             var notebook_id = $('#dlg-delete-notebook-hidden-notebook-id').val();
+            
+            // check if deleted notebook is active
+            if ( $('li[data-notebook-id="' + notebook_id + '"]').hasClass('active')) {
+                // disable note button
+                adnoto_app.disableNoteButtons();
+            }
             
             // find notebook
             var notebook = new Notebook({ id: notebook_id});
@@ -771,7 +795,8 @@ $(document).ready(function(){
             notebook.destroy();
             
             // refresh notebooks list
-            adnoto_app.notebooksListView.refreshNotebooks();
+            adnoto_app.notebooksListView.refreshNotebooks();            
+            
         }
         
     });        

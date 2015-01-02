@@ -124,7 +124,7 @@ def update_notebook(notebook_id):
 
             # return json result
             return jsonify({'notebook': result.data})
-        
+
     except Exception:
         # return json result
         return jsonify({'status' : 'error while updating notebook'}), 400
