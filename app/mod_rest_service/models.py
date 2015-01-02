@@ -20,27 +20,31 @@ class Base(db.Model):
                                            onupdate=db.func.current_timestamp())
 
 # Define a Page model
-class Page(Base):
+class Note(Base):
     """
     Describes a page in the notebook
     """
-    __tablename__ = 'page'
+    __tablename__ = 'note'
 
-    # Page title
+    # Note title
     title  = db.Column(db.String(128),  nullable=False)
 
-    # Page content
+    # Note color
+    color  = db.Column(db.String(128),  nullable=False)
+
+    # Note content
     content = db.Column(db.Text, nullable=False)
 
     # notebook id
     notebook_id = db.Column(db.Integer, db.ForeignKey('notebook.id'))
 
-    def __init__(self, title, content, notebook):
+    def __init__(self, title, content, color, notebook):
         """
         Default constructor
         """
         self.title = title
         self.content = content
+        self.color = color
         self.notebook_id = notebook.id
 
 
@@ -55,10 +59,10 @@ class Notebook(Base):
     name    = db.Column(db.String(128),  nullable=False)
 
     # Number of notes
-    number_notes    = db.Column(db.Integer)
+    number_notes   = db.Column(db.Integer)
 
-    # Pages children
-    pages = db.relationship("Page")
+    # Notes children
+    notes = db.relationship("Note")
 
     def __init__(self, name):
         """
@@ -85,9 +89,9 @@ class NotebookSchema(Schema):
         fields = ("id", "date_created", "date_modified", 'name', 'number_notes')
 
 # Page schema
-class PageSchema(Schema):
+class NoteSchema(Schema):
     """
-    Schema for model page
+    Schema for model note
     """
     class Meta:
-        fields = ("id", "date_created", "date_modified", 'title', 'content')
+        fields = ("id", "date_created", "date_modified", 'title', 'color', 'content')

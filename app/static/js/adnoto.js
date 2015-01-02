@@ -1,7 +1,23 @@
 var Note = Backbone.Model.extend({
-    url:function(){ 
-       return 'test_json/note.json';
+    urlRoot: 'api/v1/notebook/',
+
+    parse : function(response, options){
+        // when fetched occures from collection
+        if (options.collection){
+            return response;
+        }else {
+            return response.note;  
+        }
     },
+    
+    url:function(){
+        
+        if (this.id) {
+            return this.urlRoot + adnoto_app.active_notebook_id +  "/note/" + this.id;
+        } else {
+            return this.urlRoot + adnoto_app.active_notebook_id +  "/note";
+        }
+    }
 });
 var Notebook = Backbone.Model.extend({
     urlRoot: 'api/v1/notebook'
@@ -22,9 +38,13 @@ var Notes = Backbone.Collection.extend({
         this.notebook_id = options.notebook_id;
     },
     
+    parse : function(response){
+        return response.notes;  
+    },
+    
 	url: function() {
         //console.log(this.notebook_id);
-        return 'test_json/notes.json';
+        return 'api/v1/notebook/' + this.notebook_id + '/notes';
     }
 });
 var NoteColorPickerView = Backbone.View.extend({
@@ -152,9 +172,9 @@ var NoteView = Backbone.View.extend({
     },
     
     /**
-     * Get note content
+     * Show note content
      **/
-    getNote: function(note_id) {
+    showNote: function(note_id) {
         
         var self = this;
 
@@ -209,12 +229,6 @@ var NoteView = Backbone.View.extend({
         console.log('save note ' + this.note_id);
     },
     
-    /**
-     * Delete noe
-     **/
-    deleteNote: function() {
-        console.log('delete note ' + this.note_id);
-    },
     
     /**
      * Toggle mode
@@ -332,6 +346,12 @@ var NoteBooksView = Backbone.View.extend({
             
             // add active class to parent
             $(event.target).closest('li').addClass('active');
+            
+            // store notebook id
+            adnoto_app.active_notebook_id = notebook_id;
+            
+            // update notes list
+            adnoto_app.notesListView.showNotes(notebook_id);
         },
         // handle delete click
         'click i.delete-notebook': function(event) {
@@ -394,6 +414,25 @@ var NotesView = Backbone.View.extend({
     },
     
     /**
+     * Refresh noes
+     **/
+    refreshNotes: function() {
+        
+        var self = this;
+        
+        // assign 'internal' collection to new Notes
+		this.collection = new Notes([], { notebook_id: adnoto_app.active_notebook_id });
+
+        // fetch collection on success render view
+		this.collection.fetch({
+			success: function(collection) {
+				self.render();
+			} 
+		});
+
+    },
+    
+    /**
      * Filter notes
      **/
     filterNotes: function(filter) {
@@ -424,6 +463,10 @@ var NotesView = Backbone.View.extend({
             
             // add active class
             $(event.currentTarget).addClass('active');
+            
+            // show note
+            adnoto_app.noteView.showNote(note_id);
+
         }
     },
 
@@ -474,11 +517,9 @@ var setupViews = function() {
     
     // init notes list view
     adnoto_app.notesListView = new NotesView();
-    adnoto_app.notesListView.showNotes(1);
     
     // init note view
     adnoto_app.noteView = new NoteView();
-    adnoto_app.noteView.getNote(1);
 };
 /**
  * Window events
@@ -578,11 +619,11 @@ $(document).ready(function(){
             // hide dialog
             $('#dlg-delete-notebook').modal('hide');
             
-            // get note id 
-            var note_id = $('#dlg-delete-notebook-hidden-notebook-id').val();
+            // get notebook id 
+            var notebook_id = $('#dlg-delete-notebook-hidden-notebook-id').val();
             
             // find notebook
-            var notebook = new Notebook({ id: note_id});
+            var notebook = new Notebook({ id: notebook_id});
             
             // delete
             notebook.destroy();
@@ -595,27 +636,51 @@ $(document).ready(function(){
 
     // dialog new note
     $('#dlg-new-note-btn-create').bind('click', function() {
+        
         // get note title
-        var note_title = $('#dlg-delete-note-span-note-name').html();
-
+        var note_title = $('#dlg-new-note-input-note-title').val();
+                
         if (note_title.length > 0 ) {
             
             // hide dialog
             $('#dlg-new-note').modal('hide');
 
-            console.log('create new note : ' + note_title);
+            // create new note
+            var note = new Note();
+            note.set({ 'title' : note_title, 'content': ''});
+            
+            // save in dbase
+            note.save();
+            
+            // refresh note
+            adnoto_app.notesListView.refreshNotes();
         }
+        
     });   
     
     // dialog delete note
     $('#dlg-delete-note-btn-delete-note').bind('click', function() {
+        
+        // get note id
+        var note_id = $('#list-group-container').find('.active').data('note-id');
+                
         // get note title        
         var note_title = $('#list-group-container').find('.active').find('h4').html();
         
         // if note title is same as input name
         if( note_title == $('#dlg-delete-note-input-note-name').val() ) {
+            
             // hide dialog
             $('#dlg-delete-note').modal('hide');
+            
+            // delete note
+            var note = new Note({id : note_id});
+            
+            // remove note 
+            note.destroy();
+
+            // refresh note
+            adnoto_app.notesListView.refreshNotes();
         }
         
     });        

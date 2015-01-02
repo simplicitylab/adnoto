@@ -11,8 +11,8 @@ from flask.ext.login import login_required
 from app.mod_rest_service.models import Notebook
 from app.mod_rest_service.models import NotebookSchema
 
-from app.mod_rest_service.models import Page
-from app.mod_rest_service.models import PageSchema
+from app.mod_rest_service.models import Note
+from app.mod_rest_service.models import NoteSchema
 
 from app.mod_auth.models import User
 
@@ -78,7 +78,7 @@ def delete_notebook(notebook_id):
         notebook = Notebook.query.filter(Notebook.id==notebook_id).first()
 
         # if page is not found
-        if notebook == None:
+        if notebook is None:
             return jsonify({'message': 'Notebook could not be found.'}), 400
         else:
             # remove notebook from database
@@ -93,28 +93,28 @@ def delete_notebook(notebook_id):
 
 
 
-@mod_rest_service.route('/notebook/<notebook_id>/pages', methods=['GET'])
+@mod_rest_service.route('/notebook/<notebook_id>/notes', methods=['GET'])
 @login_required
 def list_pages_notebook(notebook_id):
     '''
     This endpoint returns all pages within a notebook
     '''
     try:
-        # gets all pages from notebook
-        pages = Page.query.filter(Page.notebook_id==notebook_id)
+        # gets all notes from notebook
+        notes = Note.query.filter(Note.notebook_id==notebook_id)
 
         # serialize sqlalchemy data
-        serializer = PageSchema(many=True)
-        result = serializer.dump(pages)
+        serializer = NoteSchema(many=True)
+        result = serializer.dump(notes)
 
         # return json result
-        return jsonify({'pages': result.data})
+        return jsonify({'notes': result.data})
     except Exception:
         # return json result
         return jsonify({'status' : 'error while listing pages'}), 400
 
-@mod_rest_service.route('/notebook/<notebook_id>/page', methods=['POST'])
-def create_new_page(notebook_id):
+@mod_rest_service.route('/notebook/<notebook_id>/note', methods=['POST'])
+def create_new_note(notebook_id):
     '''
     This endpoint creates a new page in a notebook
     '''
@@ -125,68 +125,69 @@ def create_new_page(notebook_id):
         # get notebook
         notebook = Notebook.query.get(notebook_id)
 
-        # create new page
-        new_page = Page(json_data['title'], json_data['content'] , notebook)
+        # create new note
+        new_note = Note(json_data['title'], json_data['content'], 'red', notebook)
 
-        # store new page into dbase
-        db.session.add(new_page)
+        # store new note into dbase
+        db.session.add(new_note)
         db.session.commit()
 
         # return json result
         return jsonify({})
-    except Exception:
+    except Exception as ex:
+        print ex
         # return json result
-        return jsonify({'status' : 'error while creating a new page'}), 400
+        return jsonify({'status' : 'error while creating a new note'}), 400
 
 
-@mod_rest_service.route('/notebook/<notebook_id>/page/<page_id>', methods=['GET'])
+@mod_rest_service.route('/notebook/<notebook_id>/note/<note_id>', methods=['GET'])
 @login_required
-def get_page(notebook_id, page_id):
+def get_note(notebook_id, note_id):
     '''
     This endpoint gets the page information
     '''
     try:
         # gets  page from notebook
-        page = Page.query.filter(Page.notebook_id==notebook_id, Page.id==page_id).first()
+        page = Note.query.filter(Note.notebook_id==notebook_id, Note.id==note_id).first()
 
         # if page is not found
-        if page == None:
-            return jsonify({'message': 'Page could not be found.'}), 400
+        if page is None:
+            return jsonify({'message': 'Note could not be found.'}), 400
         else:
              # serialize sqlalchemy data
-            serializer = PageSchema()
+            serializer =  NoteSchema()
             result = serializer.dump(page)
 
             # return json result
-            return jsonify({'page': result.data})
+            return jsonify({'note': result.data})
     except Exception:
         # return json result
-        return jsonify({'status' : 'error while getting content of page'}), 400
+        return jsonify({'status' : 'error while getting content of note'}), 400
 
 
-@mod_rest_service.route('/notebook/<notebook_id>/page/<page_id>', methods=['DELETE'])
+@mod_rest_service.route('/notebook/<notebook_id>/note/<note_id>', methods=['DELETE'])
 @login_required
-def delete_page(notebook_id, page_id):
+def delete_note(notebook_id, note_id):
     '''
     This endpoint deletes a page
     '''
     try:
-        # gets  page from notebook
-        page = Page.query.filter(Page.notebook_id==notebook_id, Page.id==page_id).first()
+        # gets note from notebook
+        note = Note.query.filter(Note.notebook_id==notebook_id, Note.id==note_id).first()
 
         # if page is not found
-        if page == None:
-            return jsonify({'message': 'Page could not be found.'}), 400
+        if note == None:
+            return jsonify({'message': 'Note could not be found.'}), 400
         else:
             # remove page from database
-            db.session.delete(page)
+            db.session.delete(note)
             db.session.commit()
 
             # return json result
             return jsonify({})
     except Exception:
         # return json result
-        return jsonify({'status' : 'error while delete a notebook'}), 400
+        return jsonify({'status' : 'error while delete note'}), 400
 
 
 @mod_rest_service.route('/user', methods=['POST'])
