@@ -81,6 +81,8 @@ def delete_notebook(notebook_id):
         # get notebook
         notebook = Notebook.query.filter(Notebook.id==notebook_id).first()
 
+        print notebook.id
+
         # if notebook is not found
         if notebook is None:
             return jsonify({'message': 'Notebook could not be found.'}), 400
@@ -94,6 +96,7 @@ def delete_notebook(notebook_id):
     except Exception:
         # return json result
         return jsonify({'status' : 'error while delete a notebook'}), 400
+
 
 @mod_rest_service.route('/notebook/<notebook_id>', methods=['PUT'])
 @login_required

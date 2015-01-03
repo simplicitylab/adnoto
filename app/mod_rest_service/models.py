@@ -62,7 +62,7 @@ class Notebook(Base):
     number_notes   = db.Column(db.Integer)
 
     # Notes children
-    notes = db.relationship("Note")
+    notes = db.relationship("Note", backref="note", lazy="select", cascade="all, delete, delete-orphan")
 
     def __init__(self, name):
         """
@@ -83,10 +83,17 @@ class NotebookSchema(Schema):
     """
     Schema for model Notebook
     """
+    id = fields.Integer()
     name = fields.Str(required=True, validate=must_not_be_blank)
+    number_notes = fields.Method("get_number_of_articles")
 
-    class Meta:
-        fields = ("id", "date_created", "date_modified", 'name', 'number_notes')
+    def get_number_of_articles(self, obj):
+        return len(obj.notes)
+
+
+
+   # class Meta:
+   #     fields = ("id", "date_created", "date_modified", 'name', 'number_notes')
 
 # Page schema
 class NoteSchema(Schema):
