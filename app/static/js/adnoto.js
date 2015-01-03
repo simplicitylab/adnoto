@@ -763,6 +763,9 @@ $(document).ready(function(){
                     // reset not
                     adnoto_app.noteView.resetNote();
                     
+                    // enable note buttons
+                    adnoto_app.enableNoteButtons();
+                    
                 }
             });
                     }
@@ -786,6 +789,12 @@ $(document).ready(function(){
             if ( $('li[data-notebook-id="' + notebook_id + '"]').hasClass('active')) {
                 // disable note button
                 adnoto_app.disableNoteButtons();
+                
+                // reset notes
+                adnoto_app.notesListView.resetNotes();
+                
+                // clear note
+                adnoto_app.noteView.resetNote();
             }
             
             // find notebook
@@ -795,7 +804,7 @@ $(document).ready(function(){
             notebook.destroy();
             
             // refresh notebooks list
-            adnoto_app.notebooksListView.refreshNotebooks();            
+            adnoto_app.notebooksListView.refreshNotebooks();    
             
         }
         
@@ -829,6 +838,9 @@ $(document).ready(function(){
                     
                     // show note
                     adnoto_app.noteView.showNote(model.id);
+                    
+                    // refresh notebooks list
+                    adnoto_app.notebooksListView.refreshNotebooks();
                     
                 }
             });
