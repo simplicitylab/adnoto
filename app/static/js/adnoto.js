@@ -569,7 +569,8 @@ var NotesView = Backbone.View.extend({
             });
             
             // render compiled html to element
-            this.$el.html(template({ notes: filtered_collection }));
+            this.$el.html(template({ notes: filtered_collection,
+                active_note_id: adnoto_app.active_note_id  }));
             
         } else {
             

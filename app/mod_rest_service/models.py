@@ -5,6 +5,7 @@ from app import db
 # Import marshmallow serializer
 from marshmallow import Schema, fields, ValidationError
 
+
 ##### Models #####
 
 # Define a base model for other database tables to inherit
@@ -100,5 +101,11 @@ class NoteSchema(Schema):
     """
     Schema for model note
     """
-    class Meta:
-        fields = ("id", "date_created", "date_modified", 'title', 'color', 'content')
+    id = fields.Integer()
+    title = fields.Str()
+    color = fields.Str()
+    content = fields.Str()
+    date = fields.Method("get_modified_date_note")
+
+    def get_modified_date_note(selfself, obj):
+        return obj.date_modified

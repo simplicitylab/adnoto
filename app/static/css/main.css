@@ -5611,6 +5611,11 @@ input:focus:-ms-input-placeholder {
 /**
  * markdownPreview
  **/
+#markdownPreview h1, #markdownPreview h2, #markdownPreview h3, #markdownPreview h4, #markdownPreview h5, #markdownPreview h6 {
+  margin-top: 50px; }
+  #markdownPreview h1:first-of-type, #markdownPreview h2:first-of-type, #markdownPreview h3:first-of-type, #markdownPreview h4:first-of-type, #markdownPreview h5:first-of-type, #markdownPreview h6:first-of-type {
+    margin-top: 0px; }
+
 /**
  * Pre code
  **/
