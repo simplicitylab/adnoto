@@ -871,6 +871,10 @@ $(document).ready(function(){
             
             // reset note
             adnoto_app.noteView.resetNote();
+            
+            // refresh notebooks list
+            adnoto_app.notebooksListView.refreshNotebooks();
+            
         }
         
     });     
