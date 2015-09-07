@@ -30,7 +30,7 @@ def list_notebooks():
     '''
     try:
         # get all notebooks
-        notebooks = Notebook.query.order_by(Notebook.name).all()
+        notebooks = Notebook.query.order_by(db.func.lower(Notebook.name)).all()
 
         # serialize sqlalchemy data
         serializer = NotebookSchema(many=True)

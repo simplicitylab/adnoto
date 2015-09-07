@@ -5,7 +5,6 @@ from app import db
 # Import marshmallow serializer
 from marshmallow import Schema, fields, ValidationError
 
-
 ##### Models #####
 
 # Define a base model for other database tables to inherit
