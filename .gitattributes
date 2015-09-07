@@ -1,4 +1,7 @@
 app/static/js/thirdparty/bootstrap/* linguist-vendored
 app/static/js/thirdparty/backbone/* linguist-vendored
+app/static/js/thirdparty/codemirror/* linguist-vendored
+app/static/js/thirdparty/jquery/* linguist-vendored
+app/static/js/thirdparty/prism/* linguist-vendored
+app/static/js/thirdparty/underscore/* linguist-vendored
 app/static/css/* linguist-vendored
-
