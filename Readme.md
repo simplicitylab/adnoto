@@ -1,17 +1,29 @@
 # Adnoto	
 
-Frustrated with the available online note taking apps - I want to use markdown and choose simplicity over features - I've build my own as a week project. 
+Frustrated with the available online note taking apps - I want to use markdown and choose simplicity over features - I've build my own as a week project. You can see the project in action [here](https://vimeo.com/115867480).
 
 I'm opening the code as I get a lot of inquiries of getting the code. Please keep in mind that I release Adnoto "as is" and **NOT** giving any support! 
 
 
 ## Technology stack
 
-* Python
-* Flask
-* SQLAlchemy (sqlite) 
-* Werkzeug 
-* Jinja2 
+Server: 
+
+* [Python 2.x](https://www.python.org/)
+* [Flask](http://flask.pocoo.org/)
+* [SQLAlchemy](http://www.sqlalchemy.org/) (sqlite) 
+* [Werkzeug](http://werkzeug.pocoo.org/)
+* [Jinja2](http://jinja.pocoo.org/docs/dev/)
+
+WebUI:
+
+* [Backbone](http://backbonejs.org/)
+* [Underscore](http://underscorejs.org/)
+* [Prism](http://prismjs.com/)
+* [CodeMirror](https://codemirror.net/)
+* [CommonMark](http://commonmark.org/)
+* [jQuery](https://jquery.com/)
+* [Bootstrap](http://getbootstrap.com/)
 
 ## Setup
 
@@ -29,10 +41,10 @@ python run.py
 
 ## Access
 
-You can access the web interface by opening your browser and navigate to server_ip:8080/login.
+You can access the web interface by opening your browser and navigate to localhost:8080/login.
 
-Login: admin
-Password: admin
+* Login: admin
+* Password: admin
 
 ## API
 
@@ -63,6 +75,14 @@ curl -H "Content-Type: application/json" -X DELETE http://localhost:8080/api/v1/
 curl -H "Content-Type: application/json" -d '{"username":"admin", "password":"admin", "is_admin": 1}' http://localhost:8080/api/v1/user
 ```
 
+### Sqlite
+
+There are 2 tables
+
+* notes
+* users
+
+You can use the sqlite3 commandline tool or something like [sqlitebrowser](http://sqlitebrowser.org/) to modify the dbase.
 
 ## License 
 
