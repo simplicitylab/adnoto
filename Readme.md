@@ -42,7 +42,7 @@ The API is very rudementary.
 
 ```
 curl -H "Content-Type: application/json" -d '{"name":"dit is een testje"}' http://localhost:8080/api/v1/notebook
-`` 
+``` 
  
 ### Create a new page
 
