@@ -2,7 +2,7 @@
 
 Frustrated with the available online note taking apps - I want to use markdown and choose simplicity over features - I've build my own as a week project. You can see the project in action [here](https://vimeo.com/115867480).
 
-I'm opening the code as I get a lot of inquiries of getting the code. Please keep in mind that I release Adnoto "as is" and **NOT** giving any support! 
+I'm opening the project as I get a lot of inquiries with regards of opening up the code. Please keep in mind that I release Adnoto "as is" and **NOT** giving any support! 
 
 
 ## Technology stack
